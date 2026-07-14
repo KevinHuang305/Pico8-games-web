@@ -1,0 +1,654 @@
+/* 引入 Google Fonts：Orbitron (復古科技字型) 與 Inter (閱讀內文字型) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap');
+
+/* PICO-8 經典十六色調色盤 (Official Palette) */
+:root {
+  --pico-black: #000000;
+  --pico-darkblue: #1D2B53;
+  --pico-darkpurple: #7E2553;
+  --pico-darkgreen: #008751;
+  --pico-brown: #AB5236;
+  --pico-darkgrey: #5F574F;
+  --pico-lightgrey: #C2C3C7;
+  --pico-white: #FFF1E8;
+  --pico-red: #FF004D;
+  --pico-orange: #FFA300;
+  --pico-yellow: #FFEC27;
+  --pico-green: #00E436;
+  --pico-blue: #29ADFF;
+  --pico-indigo: #83769C;
+  --pico-pink: #FF77A8;
+  --pico-peach: #FFCCAA;
+
+  /* 網頁 UI 設計系統對應 */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121d;
+  --bg-tertiary: #1c1c2a;
+  
+  --text-primary: var(--pico-white);
+  --text-secondary: #a5a7b8;
+  
+  --color-accent: var(--pico-pink);       /* 霓虹粉 */
+  --color-success: var(--pico-green);     /* 綠色 */
+  --color-blue: var(--pico-blue);         /* 藍色 */
+  --color-orange: var(--pico-orange);     /* 橘色 */
+  --color-yellow: var(--pico-yellow);     /* 黃色 */
+
+  /* 發光特效 */
+  --glow-accent: 0 0 15px rgba(255, 119, 168, 0.5);
+  --glow-blue: 0 0 15px rgba(41, 173, 255, 0.5);
+  --glow-green: 0 0 15px rgba(0, 228, 54, 0.5);
+  
+  --transition-speed: 0.3s;
+  --border-radius: 12px;
+}
+
+/* 全域重設與基礎樣式 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(29, 43, 83, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(126, 37, 83, 0.15) 0%, transparent 40%);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* 捲軸美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* 導覽列 */
+header {
+  border-bottom: 1px solid rgba(255, 119, 168, 0.15);
+  background-color: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.logo span {
+  color: var(--color-accent);
+  text-shadow: var(--glow-accent);
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-speed), text-shadow var(--transition-speed);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: var(--color-blue);
+  text-shadow: var(--glow-blue);
+}
+
+/* 主容器 */
+main {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+
+/* 英雄看板區 */
+.hero {
+  text-align: center;
+  margin-bottom: 4rem;
+  position: relative;
+  padding: 3rem 1rem;
+  border-radius: var(--border-radius);
+  background: radial-gradient(ellipse at center, rgba(29, 43, 83, 0.3) 0%, rgba(0,0,0,0) 70%);
+}
+
+.hero h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, var(--pico-white) 30%, var(--color-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 15px rgba(41, 173, 255, 0.2));
+}
+
+.hero p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 650px;
+  margin: 0 auto;
+  font-weight: 300;
+}
+
+/* 遊戲展示 Grid 網格 */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+/* 遊戲卡片樣式 */
+.game-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              border-color var(--transition-speed), 
+              box-shadow var(--transition-speed);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--color-accent);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), var(--glow-accent);
+}
+
+.card-img-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 75%; /* 4:3 比例 */
+  background-color: #050508;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card-img-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.game-card:hover .card-img-wrapper img {
+  transform: scale(1.06);
+}
+
+.card-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  margin-bottom: 0.6rem;
+  color: #fff;
+  transition: color var(--transition-speed);
+}
+
+.game-card:hover .card-title {
+  color: var(--color-accent);
+}
+
+.card-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  background-color: var(--bg-tertiary);
+  color: var(--pico-lightgrey);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: border-color var(--transition-speed), color var(--transition-speed);
+}
+
+.tag:hover {
+  border-color: var(--color-blue);
+  color: #fff;
+}
+
+/* Modal 彈窗 (Glassmorphism) */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(5, 5, 8, 0.88);
+  backdrop-filter: blur(16px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-speed) ease;
+  padding: 1rem;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-container {
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 119, 168, 0.25);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(255, 119, 168, 0.1);
+  border-radius: var(--border-radius);
+  width: 100%;
+  max-width: 850px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96);
+  transition: transform var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.15);
+}
+
+.modal.active .modal-container {
+  transform: scale(1);
+}
+
+.modal-header {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color var(--transition-speed);
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: var(--color-accent);
+}
+
+.modal-body {
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 遊戲詳細資訊區 */
+.game-info-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2.5rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .game-info-wrapper {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.modal-cover-wrapper {
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-cover-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.game-meta-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.info-section {
+  margin-bottom: 1.5rem;
+}
+
+.info-section h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-blue);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.info-section p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.play-action-wrapper {
+  margin-top: 1rem;
+}
+
+/* 霓虹按鈕 */
+.btn-neon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--border-radius);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  text-shadow: var(--glow-accent);
+  box-shadow: inset 0 0 0px var(--color-accent), var(--glow-accent);
+}
+
+.btn-neon:hover {
+  background-color: var(--color-accent);
+  box-shadow: 0 0 25px var(--color-accent);
+}
+
+/* PICO-8 Iframe 模擬器外殼 */
+.game-player-container {
+  display: none;
+  width: 100%;
+  max-width: 512px;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 3px solid var(--pico-darkblue);
+  box-shadow: 0 0 30px rgba(41, 173, 255, 0.3);
+  position: relative;
+  aspect-ratio: 1 / 1; /* PICO-8 標準 128x128 的 1:1 畫面 */
+  margin: 0 auto;
+}
+
+.game-player-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* 停止遊戲控制欄 */
+.player-header {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  opacity: 0.4;
+  transition: opacity var(--transition-speed);
+}
+
+.game-player-container:hover .player-header {
+  opacity: 1;
+}
+
+.btn-stop-game {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--pico-red);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: all var(--transition-speed);
+}
+
+.btn-stop-game:hover {
+  background-color: var(--pico-red);
+  box-shadow: 0 0 10px var(--pico-red);
+}
+
+/* 後台管理樣式 (共用) */
+.admin-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.admin-card h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  border-left: 4px solid var(--pico-pink);
+  padding-left: 0.75rem;
+}
+
+/* 表單元件 */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-tertiary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--color-blue);
+  box-shadow: 0 0 8px rgba(41, 173, 255, 0.2);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+/* 後台按鈕 */
+.btn-primary {
+  background: linear-gradient(135deg, var(--pico-pink), var(--pico-darkpurple));
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 119, 168, 0.35);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-secondary);
+  padding: 0.75rem 1.5rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.btn-secondary:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.btn-danger {
+  background-color: rgba(255, 0, 77, 0.1);
+  border: 1px solid var(--pico-red);
+  color: var(--pico-red);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.btn-danger:hover {
+  background-color: var(--pico-red);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 0, 77, 0.3);
+}
+
+/* Toast 通知機制 */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--bg-secondary);
+  border-left: 4px solid var(--color-success);
+  color: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 4px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 2000;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast.error {
+  border-left-color: var(--pico-red);
+}
+
+/* 頁尾 */
+footer {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: auto;
+}

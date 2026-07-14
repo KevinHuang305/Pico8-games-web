@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="黑悟的 PICO-8 遊戲天地 - 提供各種好玩又精彩的復古 PICO-8 8-bit 網頁遊戲，帶你體驗經典像素風格與純粹的遊戲樂趣！">
+  <title>黑悟的 PICO-8 遊戲天地 | PICO-8 Retro Arcade Hub</title>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 導覽列 -->
+  <header>
+    <div class="header-container">
+      <a href="index.html" class="logo" id="logoLink">
+        👾 黑悟的<span>遊戲天地</span>
+      </a>
+      <nav class="nav-links" id="mainNavigation">
+        <a href="index.html" class="active" id="navHome">首頁 Home</a>
+        <span style="color: rgba(255,255,255,0.2); margin: 0 10px;">|</span>
+        <a href="admin.html" id="navAdmin">後台 Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 主要內容區 -->
+  <main>
+    <!-- 英雄看板區 -->
+    <section class="hero" id="heroSection">
+      <h1>黑悟的 PICO-8 遊戲天地</h1>
+      <p>探索好玩又復古的 PICO-8 8-bit 微型遊戲！點擊下方任意卡片，即可查看詳細介紹並直接線上遊玩。</p>
+    </section>
+
+    <!-- 遊戲展示網格 -->
+    <section class="games-grid" id="gamesGrid">
+      <!-- 遊戲卡片將由 app.js 動態渲染 -->
+      <div style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 3rem;" id="loadingPlaceholder">
+        正在載入遊戲機台中...
+      </div>
+    </section>
+  </main>
+
+  <!-- 遊戲詳細資訊/遊玩彈窗 (Modal) -->
+  <div class="modal" id="gameModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-container">
+      <!-- 彈窗頂部 -->
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">遊戲名稱</h2>
+        <button class="close-btn" id="closeModalBtn" aria-label="關閉彈窗">&times;</button>
+      </div>
+      
+      <!-- 彈窗內容 -->
+      <div class="modal-body">
+        
+        <!-- 資訊頁狀態 -->
+        <div class="game-info-wrapper" id="gameInfoWrapper">
+          <div class="modal-cover-wrapper">
+            <img src="" alt="遊戲封面" id="modalCover">
+          </div>
+          <div class="game-meta-info">
+            <div class="info-section">
+              <h3>遊戲介紹</h3>
+              <p id="modalDescription">這是遊戲介紹說明內容...</p>
+            </div>
+            <div class="info-section">
+              <h3>操作玩法</h3>
+              <p id="modalInstructions">操作方向鍵、Z/X等按鍵說明...</p>
+            </div>
+            <div class="play-action-wrapper">
+              <button class="btn-neon" id="startGameBtn">啟動遊戲 START</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 遊戲執行狀態 (Iframe) -->
+        <div class="game-player-container" id="gamePlayerContainer">
+          <div class="player-header">
+            <button class="btn-stop-game" id="stopGameBtn">結束遊戲 STOP</button>
+          </div>
+          <iframe src="" id="gameIframe" allow="autoplay; gamepad" title="PICO-8 遊戲執行畫面"></iframe>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 提示訊息通知 (Toast) -->
+  <div class="toast" id="toastNotification">
+    提示訊息
+  </div>
+
+  <!-- 頁尾 -->
+  <footer>
+    <p>&copy; 2026 黑悟的 PICO-8 遊戲天地. Made with Retro ❤️</p>
+  </footer>
+
+  <!-- 前台 JavaScript 邏輯 -->
+  <script src="app.js"></script>
+</body>
+</html>

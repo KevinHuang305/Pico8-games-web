@@ -1,0 +1,20 @@
+[
+  {
+    "id": "celeste",
+    "title": "Celeste Classic",
+    "description": "這是一款關於攀登高峰的經典 2D 平台動作遊戲，最初是在 4 天的 Game Jam 中用 PICO-8 製作完成的，也是後來知名遊戲《蔚藍》(Celeste) 的原型。",
+    "instructions": "【方向鍵】移動與攀爬，【Z / C】跳躍，【X / V】衝刺。",
+    "cartUrl": "https://www.lexaloffle.com/bbs/widget.php?pid=11722",
+    "coverImage": "assets/celeste_cover.png",
+    "tags": ["動作", "經典", "平台跳躍"]
+  },
+  {
+    "id": "jelpi",
+    "title": "Jelpi",
+    "description": "PICO-8 官方展示遊戲。操縱可愛的 Jelpi 在繽紛的世界中奔跑、跳躍，收集水果並擊敗敵人！是一個非常經典的 PICO-8 橫向捲軸展示作。",
+    "instructions": "【左/右方向鍵】移動，【Z / C】跳躍，【X / V】動作/射擊。",
+    "cartUrl": "https://www.lexaloffle.com/bbs/widget.php?pid=29007",
+    "coverImage": "assets/jelpi_cover.png",
+    "tags": ["冒險", "官方展示", "平台跳躍"]
+  }
+]
