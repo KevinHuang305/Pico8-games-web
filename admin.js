@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="form-row">
             <div class="form-group">
               <label>PICO-8 執行連結 (Cart URL)</label>
-              <input type="text" id="input-url-${game.id}" class="form-control" value="${game.cartUrl || ''}" required placeholder="https://... 或 games/資料夾/index.html">
+              <input type="text" id="input-url-${game.id}" class="form-control" value="${game.cartUrl || ''}" required placeholder="例如: games/${game.id}/index.html 或 games/${game.id}/${game.id}.html">
             </div>
             <div class="form-group">
               <label>封面圖片路徑 (Cover Image URL/Path)</label>
