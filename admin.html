@@ -7,7 +7,9 @@
   <title>後台管理系統 | 黑悟的 PICO-8 遊戲天地</title>
   
   <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <!-- CSS Stylesheet (含防快取機制) -->
+  <script>document.write('<link rel="stylesheet" href="style.css?v=' + Math.floor(Date.now() / 60000) + '">');</script>
+  <noscript><link rel="stylesheet" href="style.css"></noscript>
   <style>
     /* 針對後台多表單渲染的額外樣式微調 */
     .game-form-card {
@@ -266,6 +268,7 @@
   </footer>
 
   <!-- 後台 JavaScript 邏輯 -->
-  <script src="admin.js"></script>
+  <!-- 後台 JavaScript 邏輯 (含防快取機制) -->
+  <script>document.write('<script src="admin.js?v=' + Math.floor(Date.now() / 60000) + '"><\/script>');</script>
 </body>
 </html>

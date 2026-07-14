@@ -7,7 +7,9 @@
   <title>黑悟的 PICO-8 遊戲天地 | PICO-8 Retro Arcade Hub</title>
   
   <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <!-- CSS Stylesheet (含防快取機制) -->
+  <script>document.write('<link rel="stylesheet" href="style.css?v=' + Math.floor(Date.now() / 60000) + '">');</script>
+  <noscript><link rel="stylesheet" href="style.css"></noscript>
 </head>
 <body>
 
@@ -114,6 +116,7 @@
   </footer>
 
   <!-- 前台 JavaScript 邏輯 -->
-  <script src="app.js"></script>
+  <!-- 前台 JavaScript 邏輯 (含防快取機制) -->
+  <script>document.write('<script src="app.js?v=' + Math.floor(Date.now() / 60000) + '"><\/script>');</script>
 </body>
 </html>
