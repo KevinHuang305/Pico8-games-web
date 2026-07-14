@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeList = [];     // 比對合併後的總展示清單 (包含已登錄與新偵測到)
   let fileSha = '';        // games.json 在 GitHub 上的 SHA (更新檔案必填)
   let isDemoMode = false;  // 是否為本地 Demo 測試模式
+  let detectedHtmlFiles = {}; // 存放已偵測到的新遊戲 HTML 檔名，格式為 { folderName: htmlFileName }
 
   // 顯示 Toast 反饋
   function showToast(message, isError = false) {
@@ -155,6 +156,43 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('無法讀取 games/ 資料夾列表，可能目錄尚未建立。我們將以空列表進行比對。');
       }
 
+      // (C) 針對未登記的新資料夾，自動發送請求搜尋其中的 HTML 檔案名稱
+      const newFolders = foldersList.filter(folderName => !gamesList.some(game => game.id === folderName));
+      if (newFolders.length > 0) {
+        const detectPromises = newFolders.map(async (folderName) => {
+          try {
+            const filesUrl = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/games/${folderName}?ref=${config.branch}`;
+            const filesResponse = await fetch(filesUrl, {
+              headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
+              }
+            });
+            if (filesResponse.ok) {
+              const files = await filesResponse.json();
+              if (Array.isArray(files)) {
+                // 優先使用 index.html
+                const indexHtml = files.find(f => f.name.toLowerCase() === 'index.html' && f.type === 'file');
+                if (indexHtml) {
+                  detectedHtmlFiles[folderName] = 'index.html';
+                } else {
+                  // 否則使用任意找到的第一個 .html 檔案
+                  const anyHtml = files.find(f => f.name.toLowerCase().endsWith('.html') && f.type === 'file');
+                  if (anyHtml) {
+                    detectedHtmlFiles[folderName] = anyHtml.name;
+                  } else {
+                    detectedHtmlFiles[folderName] = 'index.html';
+                  }
+                }
+              }
+            }
+          } catch (e) {
+            console.error(`自動偵測資料夾 ${folderName} 內容失敗:`, e);
+          }
+        });
+        await Promise.allSettled(detectPromises);
+      }
+
       // 儲存資訊至 localStorage
       localStorage.setItem('pico8_github_token', token);
       localStorage.setItem('pico8_github_config', JSON.stringify(config));
@@ -217,6 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. 模擬 games/ 下的子目錄 (包含已登記的 celeste、以及未登記的新目錄)
     foldersList = ['celeste', 'jelpi', 'retro-space-shooter', 'my-adventure-game'];
 
+    // 模擬偵測結果
+    detectedHtmlFiles['retro-space-shooter'] = 'shooter.html';
+    detectedHtmlFiles['my-adventure-game'] = 'index.html';
+
     compareAndBuildList();
     
     authPanel.style.display = 'none';
@@ -246,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
           title: folderName, // 預設名稱為該資料夾名稱
           description: '',
           instructions: '',
-          cartUrl: `games/${folderName}/index.html`, // 預設執行連結指向該資料夾下的 index.html
+          cartUrl: `games/${folderName}/${detectedHtmlFiles[folderName] || 'index.html'}`, // 動態偵測到的 HTML 檔名
           coverImage: `games/${folderName}/cover.png`, // 預設封面圖片
           tags: ['新偵測到'],
           isNewDetected: true
