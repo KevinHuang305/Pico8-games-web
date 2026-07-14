@@ -652,3 +652,102 @@ footer {
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   margin-top: auto;
 }
+
+/* PICO-8 實體卡帶風格樣式 (用於無封面截圖時的降級美化) */
+.pico-cartridge {
+  width: 100%;
+  height: 100%;
+  background: #23232f; /* 卡帶塑料外殼 */
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 4px solid #14141e;
+  border-radius: 8px;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* 卡帶頂部的凹槽與立體紋路 */
+.pico-cartridge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 6px;
+  background-color: #14141e;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/* 卡帶標籤紙 */
+.pico-cartridge-label {
+  flex: 1;
+  background: linear-gradient(135deg, var(--pico-darkblue) 0%, #111a36 100%);
+  border: 2px solid var(--pico-pink);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  text-align: center;
+  color: var(--pico-white);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 標籤紙上的裝飾條 */
+.pico-cartridge-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--pico-pink);
+}
+
+.pico-cartridge-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  color: var(--pico-yellow);
+  text-shadow: 0 2px 0 var(--pico-red);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.pico-cartridge-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  color: var(--pico-blue);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+/* 卡帶底部插槽排線紋路 */
+.pico-cartridge-bottom {
+  height: 20px;
+  margin-top: 10px;
+  background: repeating-linear-gradient(
+    90deg,
+    #14141e,
+    #14141e 5px,
+    var(--pico-orange) 5px,
+    var(--pico-orange) 10px
+  );
+  border: 1px solid #14141e;
+  border-radius: 3px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}

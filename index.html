@@ -56,8 +56,15 @@
         
         <!-- 資訊頁狀態 -->
         <div class="game-info-wrapper" id="gameInfoWrapper">
-          <div class="modal-cover-wrapper">
+          <div class="modal-cover-wrapper" id="modalCoverWrapper" style="position: relative;">
             <img src="" alt="遊戲封面" id="modalCover">
+            <div class="pico-cartridge" id="modalCartridge" style="display: none;">
+              <div class="pico-cartridge-label">
+                <div class="pico-cartridge-title" id="modalCartridgeTitle"></div>
+                <div class="pico-cartridge-logo">PICO-8 CART</div>
+              </div>
+              <div class="pico-cartridge-bottom"></div>
+            </div>
           </div>
           <div class="game-meta-info">
             <div class="info-section">

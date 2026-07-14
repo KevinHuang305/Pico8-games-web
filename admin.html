@@ -223,16 +223,28 @@
             <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">點擊可快速捲動至該表單編輯位置：</p>
             <div id="quickNavLinks">
               <!-- 由 JavaScript 動態生成導覽連結 -->
-            </div>
           </div>
 
-          <!-- 自動比對規則說明 -->
+          <!-- 自動比對說明 -->
           <div class="admin-card" style="border: 1px dashed rgba(255, 255, 255, 0.15);">
             <h2>自動比對說明</h2>
             <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
               後台會自動呼叫 GitHub API 比對 <code>games/</code> 資料夾下的所有子目錄與 <code>games.json</code> 的資料。<br><br>
-              若發現有子目錄（例如：<code>games/my-new-pico-game/</code>）存在，但 <code>games.json</code> 中沒有 <code>id</code> 為 <code>my-new-pico-game</code> 的項目，系統會將其判定為新遊戲，自動在左側產生一個預設標題為資料夾名稱的編輯表單。<br><br>
-              填妥介紹與操作說明後，點擊該表單底部的「儲存此遊戲」按鈕，即可寫入設定檔並完成線上發布！
+              若發現有子目錄存在，但 <code>games.json</code> 中沒有對應的項目，系統會將其判定為新遊戲，自動在左側產生編輯表單。
+            </p>
+          </div>
+
+          <!-- PICO-8 截圖與動圖指南 -->
+          <div class="admin-card" style="border: 1px solid rgba(255, 119, 168, 0.25); background: rgba(255, 119, 168, 0.02);">
+            <h2>PICO-8 截圖與動圖指南</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+              在 PICO-8 運行遊戲時，有非常簡便的熱鍵可以直接產生高畫質截圖或 GIF 動畫：<br><br>
+              📸 <strong>【F6】鍵 - 靜態截圖</strong>：<br>
+              按下去後，PICO-8 會立即將當前畫面存成 PNG 檔案，並儲存在您的電腦桌面上。<br><br>
+              🎬 <strong>【F9】鍵 - 錄製 GIF 動圖</strong>：<br>
+              按下去後，PICO-8 會自動把<strong>「最近 8 秒」</strong>的遊玩畫面存成一個循環 GIF 動圖存到桌面上，做封面超炫！<br><br>
+              💡 <strong>使用方法</strong>：<br>
+              將產生的 PNG 或 GIF 重新命名為 <code>cover.png</code>（或 <code>cover.gif</code>），然後放到該遊戲的資料夾內即可（例如 <code>games/snails01/cover.png</code>），後台會自動偵測並套用！
             </p>
           </div>
 
