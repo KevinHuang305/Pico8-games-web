@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let fileSha = '';        // games.json 在 GitHub 上的 SHA (更新檔案必填)
   let isDemoMode = false;  // 是否為本地 Demo 測試模式
   let detectedHtmlFiles = {}; // 存放已偵測到的新遊戲 HTML 檔名，格式為 { folderName: htmlFileName }
+  let detectedCoverFiles = {}; // 存放已偵測到的新遊戲封面圖片檔名，格式為 { folderName: coverFileName }
 
   // 顯示 Toast 反饋
   function showToast(message, isError = false) {
@@ -184,6 +185,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     detectedHtmlFiles[folderName] = 'index.html';
                   }
                 }
+
+                // --- 偵測圖片檔案 (封面圖/Label) ---
+                const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+                const imageFiles = files.filter(f => f.type === 'file' && imageExtensions.some(ext => f.name.toLowerCase().endsWith(ext)));
+                if (imageFiles.length > 0) {
+                  const coverFile = imageFiles.find(f => f.name.toLowerCase().startsWith('cover.'));
+                  if (coverFile) {
+                    detectedCoverFiles[folderName] = coverFile.name;
+                  } else {
+                    const labelFile = imageFiles.find(f => f.name.toLowerCase().includes('label'));
+                    if (labelFile) {
+                      detectedCoverFiles[folderName] = labelFile.name;
+                    } else {
+                      const cartFile = imageFiles.find(f => f.name.toLowerCase().endsWith('.p8.png'));
+                      if (cartFile) {
+                        detectedCoverFiles[folderName] = cartFile.name;
+                      } else {
+                        detectedCoverFiles[folderName] = imageFiles[0].name;
+                      }
+                    }
+                  }
+                }
               }
             }
           } catch (e) {
@@ -258,6 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 模擬偵測結果
     detectedHtmlFiles['retro-space-shooter'] = 'shooter.html';
     detectedHtmlFiles['my-adventure-game'] = 'index.html';
+    detectedCoverFiles['retro-space-shooter'] = 'label.png'; // 模擬偵測到的標籤圖
 
     compareAndBuildList();
     
@@ -289,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
           description: '',
           instructions: '',
           cartUrl: `games/${folderName}/${detectedHtmlFiles[folderName] || 'index.html'}`, // 動態偵測到的 HTML 檔名
-          coverImage: `games/${folderName}/cover.png`, // 預設封面圖片
+          coverImage: `games/${folderName}/${detectedCoverFiles[folderName] || 'cover.png'}`, // 動態偵測到的封面圖片檔名
           tags: ['新偵測到'],
           isNewDetected: true
         });
