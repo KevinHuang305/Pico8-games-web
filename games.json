@@ -1,18 +1,5 @@
 [
   {
-    "id": "jelpi",
-    "title": "Jelpi",
-    "description": "PICO-8 官方展示遊戲。操縱可愛的 Jelpi 在繽紛的世界中奔跑、跳躍，收集水果並擊敗敵人！是一個非常經典的 PICO-8 橫向捲軸展示作。",
-    "instructions": "【左/右方向鍵】移動，【Z / C】跳躍，【X / V】動作/射擊。",
-    "cartUrl": "https://www.lexaloffle.com/bbs/widget.php?pid=29007",
-    "coverImage": "assets/jelpi_cover.png",
-    "tags": [
-      "冒險",
-      "官方展示",
-      "平台跳躍"
-    ]
-  },
-  {
     "id": "snails01",
     "title": "重裝蝸牛：鋼鐵甲殼",
     "description": "誰說蝸牛只能慢吞吞？這一次，武裝蝸牛將打破你的刻板印象！\n《重裝蝸牛：鋼鐵甲殼》是一款結合「平台動作跳躍」與「360度滑鼠射擊」的 2D 橫向捲軸挑戰遊戲。玩家將扮演一隻裝配了高科技全方位射擊砲塔的強悍蝸牛，在充滿未知危機與懸崖深淵的荒野地帶展開突破重圍的冒險。",
