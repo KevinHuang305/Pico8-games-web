@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 1. 讀取本地的 games.json
     try {
-      const localResponse = await fetch('games.json');
+      const localResponse = await fetch('games.json?t=' + Date.now());
       if (localResponse.ok) {
         gamesList = await localResponse.json();
       } else {

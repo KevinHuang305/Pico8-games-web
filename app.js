@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const gameModal = document.getElementById('gameModal');
   const modalTitle = document.getElementById('modalTitle');
   const modalCover = document.getElementById('modalCover');
+  const modalCartridge = document.getElementById('modalCartridge');
+  const modalCartridgeTitle = document.getElementById('modalCartridgeTitle');
   const modalDescription = document.getElementById('modalDescription');
   const modalInstructions = document.getElementById('modalInstructions');
   const startGameBtn = document.getElementById('startGameBtn');
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 初始化載入遊戲資料
   async function loadGames() {
     try {
-      const response = await fetch('games.json');
+      const response = await fetch('games.json?t=' + Date.now());
       if (!response.ok) {
         throw new Error(`無法載入遊戲資料，狀態碼: ${response.status}`);
       }
@@ -73,9 +75,28 @@ document.addEventListener('DOMContentLoaded', () => {
         ? game.tags.map(tag => `<span class="tag">${tag}</span>`).join('')
         : '';
 
+      // 檢查是否有有效的封面圖片
+      const hasCover = game.coverImage && game.coverImage.trim() !== '' && !game.coverImage.includes('placeholder.png');
+      const coverImageHtml = hasCover
+        ? `<img src="${game.coverImage}" alt="${game.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+           <div class="pico-cartridge" style="display: none;">
+             <div class="pico-cartridge-label">
+               <div class="pico-cartridge-title">${game.title}</div>
+               <div class="pico-cartridge-logo">PICO-8 CART</div>
+             </div>
+             <div class="pico-cartridge-bottom"></div>
+           </div>`
+        : `<div class="pico-cartridge">
+             <div class="pico-cartridge-label">
+               <div class="pico-cartridge-title">${game.title}</div>
+               <div class="pico-cartridge-logo">PICO-8 CART</div>
+             </div>
+             <div class="pico-cartridge-bottom"></div>
+           </div>`;
+
       card.innerHTML = `
         <div class="card-img-wrapper">
-          <img src="${game.coverImage || 'placeholder.png'}" alt="${game.title}" onerror="this.src='https://placehold.co/400x300/12121d/FFF1E8?text=${encodeURIComponent(game.title)}'">
+          ${coverImageHtml}
         </div>
         <div class="card-content">
           <h3 class="card-title">${game.title}</h3>
@@ -103,10 +124,24 @@ document.addEventListener('DOMContentLoaded', () => {
   function openModal(game) {
     activeGame = game;
     modalTitle.textContent = game.title;
-    modalCover.src = game.coverImage || '';
-    modalCover.onerror = function() {
-      this.src = `https://placehold.co/400x300/12121d/FFF1E8?text=${encodeURIComponent(game.title)}`;
-    };
+    
+    // 處理彈窗封面與卡帶降級顯示
+    const hasCover = game.coverImage && game.coverImage.trim() !== '' && !game.coverImage.includes('placeholder.png');
+    modalCartridgeTitle.textContent = game.title;
+    
+    if (hasCover) {
+      modalCover.style.display = 'block';
+      modalCartridge.style.display = 'none';
+      modalCover.src = game.coverImage;
+      modalCover.onerror = function() {
+        modalCover.style.display = 'none';
+        modalCartridge.style.display = 'flex';
+      };
+    } else {
+      modalCover.style.display = 'none';
+      modalCartridge.style.display = 'flex';
+    }
+
     modalDescription.textContent = game.description || '無詳細介紹。';
     modalInstructions.textContent = game.instructions || '無操作說明。';
 
