@@ -1,4 +1,0 @@
-GitHub token
-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
-
-https://kevinhuang305.github.io/Pico8-games-web/

@@ -1,0 +1,4 @@
+# Local token and credentials files
+ref.txt
+*.log
+.DS_Store
