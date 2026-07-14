@@ -81,12 +81,22 @@
           </div>
         </div>
 
-        <!-- 遊戲執行狀態 (Iframe) -->
-        <div class="game-player-container" id="gamePlayerContainer">
-          <div class="player-header">
-            <button class="btn-stop-game" id="stopGameBtn">結束遊戲 STOP</button>
+        <!-- 遊戲執行狀態 -->
+        <div class="game-play-area" id="gamePlayArea" style="display: none;">
+          <div class="game-player-container" id="gamePlayerContainer">
+            <iframe src="" id="gameIframe" allow="autoplay; gamepad; fullscreen" allowfullscreen title="PICO-8 遊戲執行畫面"></iframe>
           </div>
-          <iframe src="" id="gameIframe" allow="autoplay; gamepad" title="PICO-8 遊戲執行畫面"></iframe>
+          <div class="game-controls-bar">
+            <button class="btn-control btn-control-stop" id="stopGameBtn">
+              <span class="icon">⏹️</span>結束遊戲 STOP
+            </button>
+            <button class="btn-control btn-control-size" id="toggleSizeBtn">
+              <span class="icon">🔍</span>兩倍畫面 2X
+            </button>
+            <button class="btn-control btn-control-fullscreen" id="fullscreenBtn">
+              <span class="icon">📺</span>全螢幕 FULLSCREEN
+            </button>
+          </div>
         </div>
 
       </div>

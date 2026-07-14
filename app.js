@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // DOM 元素選取
   const gamesGrid = document.getElementById('gamesGrid');
   const gameModal = document.getElementById('gameModal');
+  const modalContainer = gameModal.querySelector('.modal-container');
   const modalTitle = document.getElementById('modalTitle');
   const modalCover = document.getElementById('modalCover');
   const modalCartridge = document.getElementById('modalCartridge');
@@ -12,8 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalInstructions = document.getElementById('modalInstructions');
   const startGameBtn = document.getElementById('startGameBtn');
   const stopGameBtn = document.getElementById('stopGameBtn');
+  const toggleSizeBtn = document.getElementById('toggleSizeBtn');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
   const closeModalBtn = document.getElementById('closeModalBtn');
   const gameInfoWrapper = document.getElementById('gameInfoWrapper');
+  const gamePlayArea = document.getElementById('gamePlayArea');
   const gamePlayerContainer = document.getElementById('gamePlayerContainer');
   const gameIframe = document.getElementById('gameIframe');
   const toast = document.getElementById('toastNotification');
@@ -147,7 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 重設 Modal 內部顯示狀態
     gameInfoWrapper.style.display = 'grid';
-    gamePlayerContainer.style.display = 'none';
+    gamePlayArea.style.display = 'none';
+    gamePlayerContainer.classList.remove('size-2x');
+    modalContainer.classList.remove('size-2x');
+    toggleSizeBtn.classList.remove('active');
+    toggleSizeBtn.innerHTML = '<span class="icon">🔍</span>兩倍畫面 2X';
     gameIframe.src = '';
     gameIframe.onload = null; // 移除之前的 onload 監聽
 
@@ -164,6 +172,12 @@ document.addEventListener('DOMContentLoaded', () => {
     gameIframe.onload = null;
     gameIframe.src = '';
     activeGame = null;
+
+    // 重設畫面大小狀態
+    gamePlayerContainer.classList.remove('size-2x');
+    modalContainer.classList.remove('size-2x');
+    toggleSizeBtn.classList.remove('active');
+    toggleSizeBtn.innerHTML = '<span class="icon">🔍</span>兩倍畫面 2X';
   }
 
   // 開始遊戲
@@ -175,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. 切換顯示模式為播放器
     gameInfoWrapper.style.display = 'none';
-    gamePlayerContainer.style.display = 'block';
+    gamePlayArea.style.display = 'flex';
 
     // 2. 監聽 Iframe 載入事件，載入完成後自動聚焦
     gameIframe.onload = () => {
@@ -206,9 +220,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function stopGame() {
     gameIframe.onload = null;
     gameIframe.src = '';
-    gamePlayerContainer.style.display = 'none';
+    gamePlayArea.style.display = 'none';
     gameInfoWrapper.style.display = 'grid';
     
+    // 重設畫面大小狀態
+    gamePlayerContainer.classList.remove('size-2x');
+    modalContainer.classList.remove('size-2x');
+    toggleSizeBtn.classList.remove('active');
+    toggleSizeBtn.innerHTML = '<span class="icon">🔍</span>兩倍畫面 2X';
+
     // 將焦點還原到 Modal 內部主按鈕上
     startGameBtn.focus();
   }
@@ -232,6 +252,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   startGameBtn.addEventListener('click', startGame);
   stopGameBtn.addEventListener('click', stopGame);
+
+  // 兩倍畫面切換
+  toggleSizeBtn.addEventListener('click', () => {
+    const is2x = gamePlayerContainer.classList.toggle('size-2x');
+    modalContainer.classList.toggle('size-2x', is2x);
+    toggleSizeBtn.classList.toggle('active', is2x);
+    if (is2x) {
+      toggleSizeBtn.innerHTML = '<span class="icon">🔍</span>還原畫面 1X';
+      showToast('已切換至兩倍畫面比例');
+    } else {
+      toggleSizeBtn.innerHTML = '<span class="icon">🔍</span>兩倍畫面 2X';
+      showToast('已還原至標準畫面比例');
+    }
+  });
+
+  // 全螢幕切換
+  fullscreenBtn.addEventListener('click', () => {
+    const requestFullscreen = gameIframe.requestFullscreen || 
+                              gameIframe.webkitRequestFullscreen || 
+                              gameIframe.mozRequestFullScreen || 
+                              gameIframe.msRequestFullscreen;
+    if (requestFullscreen) {
+      requestFullscreen.call(gameIframe)
+        .then(() => {
+          showToast('進入全螢幕模式，按下 ESC 可退出');
+        })
+        .catch(err => {
+          console.error('無法進入全螢幕模式:', err);
+          showToast('無法進入全螢幕模式', true);
+        });
+    } else {
+      showToast('您的瀏覽器不支援全螢幕 API', true);
+    }
+  });
 
   // 啟動載入
   loadGames();
