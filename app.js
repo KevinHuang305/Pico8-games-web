@@ -21,9 +21,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const gamePlayerContainer = document.getElementById('gamePlayerContainer');
   const gameIframe = document.getElementById('gameIframe');
   const toast = document.getElementById('toastNotification');
+  const modalPlayCount = document.getElementById('modalPlayCount');
 
+  const COUNTER_API_NAMESPACE = 'heiwu_pico8_arcade';
   let gamesData = [];
   let activeGame = null;
+
+  // 獲取遊玩人次
+  async function fetchPlayCount(gameId) {
+    try {
+      const response = await fetch(`https://api.counterapi.dev/v1/${COUNTER_API_NAMESPACE}/${gameId}`);
+      if (response.ok) {
+        const data = await response.json();
+        return data.count || 0;
+      } else if (response.status === 400) {
+        return 0;
+      }
+    } catch (err) {
+      console.warn(`[CounterAPI] 無法取得遊戲 ${gameId} 的計數:`, err);
+    }
+    return null;
+  }
+
+  // 增加遊玩人次
+  async function incrementPlayCount(gameId) {
+    try {
+      const response = await fetch(`https://api.counterapi.dev/v1/${COUNTER_API_NAMESPACE}/${gameId}/up`);
+      if (response.ok) {
+        const data = await response.json();
+        return data.count;
+      }
+    } catch (err) {
+      console.warn(`[CounterAPI] 無法增加遊戲 ${gameId} 的計數:`, err);
+    }
+    return null;
+  }
 
   // 顯示 Toast 訊息
   function showToast(message, isError = false) {
@@ -32,6 +64,20 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       toast.classList.remove('show');
     }, 3000);
+  }
+
+  // 載入所有遊戲的遊玩次數
+  function loadAllPlayCounts(games) {
+    games.forEach(game => {
+      fetchPlayCount(game.id).then(count => {
+        const badgeEl = document.getElementById(`play-count-${game.id}`);
+        if (badgeEl && count !== null) {
+          badgeEl.textContent = `🎮 ${count} 次遊玩`;
+        } else if (badgeEl) {
+          badgeEl.textContent = `🎮 0 次遊玩`;
+        }
+      });
+    });
   }
 
   // 初始化載入遊戲資料
@@ -43,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       gamesData = await response.json();
       renderGames(gamesData);
+      loadAllPlayCounts(gamesData);
     } catch (error) {
       console.error(error);
       gamesGrid.innerHTML = `
@@ -105,6 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="card-content">
           <h3 class="card-title">${game.title}</h3>
           <p class="card-description">${game.description}</p>
+          <div class="card-stats">
+            <span class="play-count-badge" id="play-count-${game.id}">🎮 -- 次遊玩</span>
+          </div>
           <div class="card-tags">
             ${tagsHtml}
           </div>
@@ -149,6 +199,14 @@ document.addEventListener('DOMContentLoaded', () => {
     modalDescription.textContent = game.description || '無詳細介紹。';
     modalInstructions.textContent = game.instructions || '無操作說明。';
 
+    // 取得並顯示該遊戲目前已載入的遊玩次數
+    const cardBadge = document.getElementById(`play-count-${game.id}`);
+    if (cardBadge && modalPlayCount) {
+      modalPlayCount.textContent = cardBadge.textContent;
+    } else if (modalPlayCount) {
+      modalPlayCount.textContent = '🎮 -- 次遊玩';
+    }
+
     // 重設 Modal 內部顯示狀態
     gameInfoWrapper.style.display = 'grid';
     gamePlayArea.style.display = 'none';
@@ -186,6 +244,19 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast('此遊戲沒有可用的遊玩連結', true);
       return;
     }
+
+    // 遞增並更新遊玩計數器
+    incrementPlayCount(activeGame.id).then(newCount => {
+      if (newCount !== null) {
+        const badgeEl = document.getElementById(`play-count-${activeGame.id}`);
+        if (badgeEl) {
+          badgeEl.textContent = `🎮 ${newCount} 次遊玩`;
+        }
+        if (modalPlayCount) {
+          modalPlayCount.textContent = `🎮 ${newCount} 次遊玩`;
+        }
+      }
+    });
 
     // 1. 切換顯示模式為播放器
     gameInfoWrapper.style.display = 'none';

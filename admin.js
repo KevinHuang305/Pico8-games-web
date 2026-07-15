@@ -33,6 +33,24 @@ document.addEventListener('DOMContentLoaded', () => {
   let detectedHtmlFiles = {}; // 存放已偵測到的新遊戲 HTML 檔名，格式為 { folderName: htmlFileName }
   let detectedCoverFiles = {}; // 存放已偵測到的新遊戲封面圖片檔名，格式為 { folderName: coverFileName }
 
+  const COUNTER_API_NAMESPACE = 'heiwu_pico8_arcade';
+
+  // 獲取遊玩人次
+  async function fetchPlayCount(gameId) {
+    try {
+      const response = await fetch(`https://api.counterapi.dev/v1/${COUNTER_API_NAMESPACE}/${gameId}`);
+      if (response.ok) {
+        const data = await response.json();
+        return data.count || 0;
+      } else if (response.status === 400) {
+        return 0;
+      }
+    } catch (err) {
+      console.warn(`[CounterAPI] 無法取得遊戲 ${gameId} 的計數:`, err);
+    }
+    return null;
+  }
+
   // 顯示 Toast 反饋
   function showToast(message, isError = false) {
     toast.textContent = message;
@@ -338,6 +356,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // 渲染表單與側邊導覽
     renderForms();
     renderQuickNav();
+    loadAllAdminPlayCounts();
+  }
+
+  // 獲取並載入後台所有遊戲的遊玩計數
+  function loadAllAdminPlayCounts() {
+    activeList.forEach(game => {
+      if (!game.isNewDetected) {
+        fetchPlayCount(game.id).then(count => {
+          const el = document.getElementById(`admin-play-count-${game.id}`);
+          if (el && count !== null) {
+            el.innerHTML = `🎮 ${count} 次`;
+          }
+        });
+      }
+    });
   }
 
   // 4. 動態渲染每個遊戲的專屬編輯表單卡片
@@ -359,9 +392,13 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = `game-form-card ${game.isNewDetected ? 'new-detected' : 'registered'}`;
       card.id = `form-card-${game.id}`;
 
+      const playCountBadgeHtml = game.isNewDetected
+        ? ''
+        : `<span class="status-badge play-count" id="admin-play-count-${game.id}" style="background-color: rgba(41, 173, 255, 0.1); color: var(--color-blue); border: 1px solid rgba(41, 173, 255, 0.25); margin-left: 8px;">🎮 -- 次</span>`;
+
       const statusBadgeHtml = game.isNewDetected 
         ? `<span class="status-badge new">✨ 新偵測到</span>`
-        : `<span class="status-badge reg">已登錄</span>`;
+        : `<span class="status-badge reg">已登錄</span>${playCountBadgeHtml}`;
 
       // 組合標籤文字
       const tagsString = game.tags ? game.tags.join(', ') : '';
